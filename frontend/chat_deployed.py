@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-LANGGRAPH_URL = os.getenv("LANGGRAPH_URL")
+LANGGRAPH_SERVER_URL = os.getenv("LANGGRAPH_SERVER_URL")
 
 
 async def create_thread(user_id: str) -> dict:
@@ -14,7 +14,7 @@ async def create_thread(user_id: str) -> dict:
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                url=f"{LANGGRAPH_URL}/threads",
+                url=f"{LANGGRAPH_SERVER_URL}/threads",
                 json={
                     "thread_id": str(uuid.uuid4()),
                     "metadata": {
@@ -37,7 +37,7 @@ async def get_thread_state(thread_id: str) -> dict:
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                url=f"{LANGGRAPH_URL}/threads/{thread_id}/state"
+                url=f"{LANGGRAPH_SERVER_URL}/threads/{thread_id}/state"
             )
             response.raise_for_status()
 
@@ -106,7 +106,7 @@ async def get_stream(thread_id: str, message: str):
         async with httpx.AsyncClient() as client:
             async with client.stream(
                 "POST",
-                url=f"{LANGGRAPH_URL}/threads/{thread_id}/runs/stream",
+                url=f"{LANGGRAPH_SERVER_URL}/threads/{thread_id}/runs/stream",
                 json={
                     "assistant_id": "scout",
                     "input": {
