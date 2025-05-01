@@ -7,7 +7,7 @@ Watch the YT video here and **Subscribe** to my free community to get the accomp
 ## Requirements
 
 - Python 3.12
-- Docker
+- OpenAI API key
 - Supabase account (optional for persistance and deployment)
 - Langsmith account (optional for tracing)
 - Render account (optional for deployment)

@@ -14,9 +14,6 @@ DATABASE_URI=os.getenv("DATABASE_URI", None)
 required_env_vars = [
     "SUPABASE_URL",
     "OPENAI_API_KEY",
-    "LANGSMITH_API_KEY",
-    "REDIS_URI",
-    "DATABASE_URI",
 ]
 
 for var in required_env_vars:
