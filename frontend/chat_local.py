@@ -1,4 +1,5 @@
 from onlyvans.graph import Agent
+from onlyvans.prompts import SCOUT_SYSTEM_PROMPT
 
 
 def main():
@@ -12,7 +13,7 @@ def main():
 
         agent = Agent(
             name="Scout",
-            system_prompt="You are a helpful assistant.",
+            system_prompt=SCOUT_SYSTEM_PROMPT,
             model="gpt-4.1-mini-2025-04-14",
             temperature=0.1
         )

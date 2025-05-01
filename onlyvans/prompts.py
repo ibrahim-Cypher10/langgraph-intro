@@ -9,6 +9,8 @@ You have access to the following tools:
 
 ## DB SCHEMA
 
+The database has the following tables on the schema `onlyvans`. You should only access the tables on this schema.
+
 [creators]
 id: int8 (Primary key)
 first_name: text
