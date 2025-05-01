@@ -1,6 +1,6 @@
 # LangGraph Intro
 
-This project gives a fundamental introduction to LangGraph by using it to build a simple but powerful data analytics AI agent that can query your database, perform analyses, and generate visualizations. This is an end-to-end, full-deployed AI agent that will teach you core Langgraph concepts so that you can build amazing AI systems yourself. It's meant to be a starting point so add to this example to expand on the agent's capabilities and create your own full-deployed, powerful AI agents.
+This project gives a fundamental introduction to LangGraph by using it to build a simple but powerful data analytics AI agent that can query your database, perform analyses, and generate visualizations. This is an end-to-end, full-deployed AI agent that will teach you core Langgraph concepts so that you can build amazing AI systems yourself. It's meant to be a starting point so add to this example to expand on the agent's capabilities and create your own full-deployed, powerful AI agents. Everything covered is free except for usage of the OpenAI API - however feel free to adopt the code to use any provider including local models for free.
 
 Watch the YT video here and **Subscribe** to my free community to get the accompanying cheat-sheet with in-depth notes and more advanced topics and diagrams.
 
@@ -27,47 +27,63 @@ Only steps 1 through 3 are required to get the agent up and running. Steps 4-7 a
 
 ### 1. Clone the repo
 
+Navigate to the directory where you want to clone the repo.
+
 Clone it to your local machine.
 
 ```bash
 git clone https://github.com/onlyvans/langgraph-intro.git
 ```
 
+Enter the project directory.
+
+```bash
+cd langgraph-intro
+```
+
 ### 2. Install packages in a virtual environment
 
-The recommended way is to use the package manager uv. This will automatically create a virtual environment and install the packages defined in pyproject.toml. It will also install the onlyvans package in editable mode so any code changes you make will be reflected in the package.
+#### Using uv (recommended)
+
+The recommended way is to use the package manager uv as it's fast, efficient, and makes the whole process much easier! See [uv](https://github.com/onlyvans/uv) for information on how to install uv.
+
+If using uv, we can create a virtual environment in the project directory and install the required packages with one command.
 
 ```bash
-uv pip install -e .
+uv sync
 ```
 
-You can also install the packages manually using pip. It's recommended you first create a virtual environment in the project directory.
+We also want to install the local onlyvans package in editable mode so that we can import it to our frontend scripts, and so that any changes you make will be automatically reflected.
 
 ```bash
-pip install -e .
+uv install -e .
 ```
 
-### 3. Set up the .env file
+### 3. Set up the database (optional)
 
-1. Copy the `.env.sample` file to `.env`.
-2. Fill in the environment variables with your own secrets.
-
-### 4. Set up the database (optional)
-
-We are using Supabase which offers a generous free tier, for our postgresql database. You can optionally use your own provider and simply change the database URI in the .env file.
+We are using Supabase for our Postgresql database. Supabase is easy to set up and offers a generous free tier. You can optionally connect any database of your choosing by simply changing the SUPABASE_URL and DATABASE_URI in the .env file.
 
 1. Create a Supabase account at supabase.com.
 2. Create a new project.
-3. Create three new tables using the `sample_data` files to define the schema:
-    - creators
-    - customers
-    - transactions
-4. Navigate to the Table Editor in the side menu.
-5. Import the sample data from the `sample_data` folder.
+3. Select the new project and navigate to the Table Editor in the side menu.
+4. Create a new schema called `onlyvans`.
+5. Make sure the `onlyvans` schema is selected.
+6. Create a new table called `creators`.
+![alt text](static/import_csv.png)
+7. You'll see a pop up and you can select the import data from CSV button to automatically load the data and set the schema. Repeat this for the other tables by loading all of the data in the sample_data folder.
 
-### 5. Create a Langsmith account (optional)
+### 4. Create a Langsmith account (optional)
 
 Langsmith is used for logging and monitoring. This is completely optional but highly recommended as it makes it easy to track and debug your LangGraph applications. You can create a free account at [langsmith.com](https://langsmith.com/).
+
+### 5. Create a Render account (optional)
+
+Render is used for deploying the LangGraph server. This is completely optional but highly recommended as it makes it easy to deploy your LangGraph applications. You can create a free account at [render.com](https://render.com/).
+
+### 6. Set up the .env file
+
+1. Copy the `.env.sample` file to `.env`.
+2. Fill in the environment variables with your own secrets.
 
 ## Deployment
 
