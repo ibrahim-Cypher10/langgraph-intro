@@ -9,7 +9,7 @@ ADD . /deps/langgraph-intro
 # -- Installing all local dependencies --
 RUN PYTHONDONTWRITEBYTECODE=1 pip install --no-cache-dir -c /api/constraints.txt -e /deps/*
 # -- End of local dependencies install --
-ENV LANGSERVE_GRAPHS='{"scout": "/deps/langgraph-intro/onlyvans/graph.py:graph"}'
+ENV LANGSERVE_GRAPHS='{"scout": "/deps/langgraph-intro/scout/graph.py:graph"}'
 
 
 

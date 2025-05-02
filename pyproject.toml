@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["onlyvans"]
+packages = ["scout"]
 
 [dependency-groups]
 dev = [

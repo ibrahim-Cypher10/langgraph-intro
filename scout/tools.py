@@ -4,7 +4,7 @@ Tools for the agent to use.
 from langchain_core.tools import tool
 from sqlalchemy import create_engine, text, Engine
 import pandas as pd
-from onlyvans import env
+from scout import env
 from langgraph.types import Command
 from langchain_core.tools.base import InjectedToolCallId
 from typing import Annotated

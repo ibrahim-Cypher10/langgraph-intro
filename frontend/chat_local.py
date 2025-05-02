@@ -1,5 +1,5 @@
-from onlyvans.graph import Agent
-from onlyvans.prompts import SCOUT_SYSTEM_PROMPT
+from scout.graph import Agent
+from scout.prompts import SCOUT_SYSTEM_PROMPT
 
 
 def main():

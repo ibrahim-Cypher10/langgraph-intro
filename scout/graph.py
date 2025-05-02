@@ -6,8 +6,8 @@ from langgraph.graph.message import add_messages
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode
 from langgraph.checkpoint.memory import MemorySaver
-from onlyvans.tools import query_db, generate_visualization
-from onlyvans.prompts import SCOUT_SYSTEM_PROMPT
+from scout.tools import query_db, generate_visualization
+from scout.prompts import SCOUT_SYSTEM_PROMPT
 
 
 class  ScoutState(BaseModel):
