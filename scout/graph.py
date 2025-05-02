@@ -7,7 +7,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode
 from langgraph.checkpoint.memory import MemorySaver
 from scout.tools import query_db, generate_visualization
-from scout.prompts import SCOUT_SYSTEM_PROMPT
+from scout.prompts import prompts
 
 
 class  ScoutState(BaseModel):
@@ -151,6 +151,6 @@ class Agent:
 # Define and instantiate the agent 
 agent = Agent(
         name="Scout",
-        system_prompt=SCOUT_SYSTEM_PROMPT
+        system_prompt=prompts.scout_system_prompt
         )
 graph = agent.build_graph()

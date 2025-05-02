@@ -1,5 +1,5 @@
 from scout.graph import Agent
-from scout.prompts import SCOUT_SYSTEM_PROMPT
+from scout.prompts import prompts
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
 
         agent = Agent(
             name="Scout",
-            system_prompt=SCOUT_SYSTEM_PROMPT,
+            system_prompt=prompts.scout_system_prompt,
             model="gpt-4.1-mini-2025-04-14",
             temperature=0.1
         )

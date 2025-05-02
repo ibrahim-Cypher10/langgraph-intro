@@ -14,7 +14,7 @@ Watch the YT video here and **Subscribe** to my free community to get the accomp
 
 ## Project Structure
 
-- `onlyvans`: The package containing the agent definition.
+- `scout`: The package containing the agent definition.
 - `sample_data`: The sample data we'll load into our postgresql database.
 - `chat.py`: A simple test chat to test the agent in the local environment.
 - `app.py`: A simple command-line "frontend" for testing the deployed agent.
