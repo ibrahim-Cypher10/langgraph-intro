@@ -23,6 +23,7 @@ packages = ["scout"]
 [dependency-groups]
 dev = [
     "ipykernel>=6.29.5",
+    "langgraph-api>=0.2.18",
     "langgraph-cli>=0.2.6",
     "nbformat>=5.10.4",
 ]
