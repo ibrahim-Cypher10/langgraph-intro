@@ -16,3 +16,6 @@ wheels/
 
 # visualizations produced by agent
 /frontend/output/*
+
+# macOS
+.DS_Store
