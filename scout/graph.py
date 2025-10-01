@@ -108,7 +108,7 @@ class Agent:
         builder.add_conditional_edges("chatbot", router, ["tools", END])
         builder.add_edge("tools", "chatbot")
 
-        return builder.compile(checkpointer=MemorySaver())
+        return builder.compile()
     
 
     def inspect_graph(self):

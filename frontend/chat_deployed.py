@@ -7,6 +7,7 @@ load_dotenv()
 
 
 LANGGRAPH_SERVER_URL = os.getenv("LANGGRAPH_SERVER_URL")
+# LANGGRAPH_SERVER_URL = https://langgraph-intro-35xv.onrender.com
 
 
 async def create_thread(user_id: str) -> dict:
@@ -38,6 +39,37 @@ async def get_thread_state(thread_id: str) -> dict:
         async with httpx.AsyncClient() as client:
             response = await client.get(
                 url=f"{LANGGRAPH_SERVER_URL}/threads/{thread_id}/state"
+            )
+            response.raise_for_status()
+
+            return response.json()
+    except Exception as e:
+        print(f"Request failed: {e}")
+        raise
+
+
+async def get_thread_messages(thread_id: str) -> dict:
+    """Get the message history of the thread."""
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                url=f"{LANGGRAPH_SERVER_URL}/threads/{thread_id}/messages"
+            )
+            response.raise_for_status()
+
+            return response.json()
+    except Exception as e:
+        print(f"Request failed: {e}")
+        raise
+
+
+async def save_thread_state(thread_id: str, state_data: dict) -> dict:
+    """Save the current state of the thread."""
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                url=f"{LANGGRAPH_SERVER_URL}/threads/{thread_id}/save",
+                json=state_data
             )
             response.raise_for_status()
 
@@ -150,6 +182,33 @@ async def main():
             user_input = input("User: ")
             if user_input.lower() in ["exit", "quit"]:
                 break
+            elif user_input.lower() in ["history", "h"]:
+                # Show thread history
+                print(f"\n---- Thread History ---- \n")
+                try:
+                    messages = await get_thread_messages(thread_id)
+                    if "messages" in messages:
+                        for msg in messages["messages"]:
+                            role = msg.get("role", "unknown")
+                            content = msg.get("content", "")
+                            print(f"{role.upper()}: {content}\n")
+                    else:
+                        print("No message history found.")
+                except Exception as e:
+                    print(f"Error retrieving history: {e}")
+                print("")
+                continue
+            elif user_input.lower() in ["save", "s"]:
+                # Save current thread state
+                print(f"\n---- Saving Thread State ---- \n")
+                try:
+                    thread_state = await get_thread_state(thread_id)
+                    save_result = await save_thread_state(thread_id, thread_state)
+                    print(f"Thread state saved successfully: {save_result}")
+                except Exception as e:
+                    print(f"Error saving thread state: {e}")
+                print("")
+                continue
 
             print(f"\n---- User ---- \n\n{user_input}\n")
 
@@ -181,6 +240,6 @@ if __name__ == "__main__":
     import nest_asyncio
     nest_asyncio.apply()
 
-    print(f"\nGreetings!\n\nTry asking Scout to show you a preview of the data.\n\n{40*"="}\n\n")
+    print(f"\nGreetings!\n\nTry asking Scout to show you a preview of the data.\n\nCommands:\n- Type 'history' or 'h' to view thread history\n- Type 'save' or 's' to save current thread state\n- Type 'exit' or 'quit' to end the session\n\n{'=' * 40}\n\n")
 
     asyncio.run(main())
