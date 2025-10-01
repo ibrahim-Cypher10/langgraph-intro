@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Annotated, List, Generator
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage, AIMessageChunk
 from langgraph.graph.message import add_messages
 from langgraph.graph import StateGraph, START, END
@@ -8,6 +8,41 @@ from langgraph.prebuilt import ToolNode
 from langgraph.checkpoint.memory import MemorySaver
 from scout.tools import query_db, generate_visualization
 from scout.prompts import prompts
+from scout.env import GROQ_API_KEY, GROQ_MODEL, GROQ_TEMPERATURE
+
+# Global flag to track if Groq config has been logged
+_groq_config_logged = False
+
+
+def get_groq_chat_model() -> ChatGroq:
+    """Get the main Groq chat model for complex tasks."""
+    api_key = GROQ_API_KEY
+    model = GROQ_MODEL
+    temperature = GROQ_TEMPERATURE
+
+    # Validate API key
+    if not api_key:
+        raise ValueError("GROQ_API_KEY is not set. Please set the GROQ_API_KEY environment variable.")
+
+    # Only print config once during startup
+    global _groq_config_logged
+    if not _groq_config_logged:
+        masked_key = (api_key[:4] + "...") if api_key else "<missing>"
+        print("🔧 Groq Model Config:")
+        print(f"   Model: {model}")
+        print(f"   API Key: {masked_key}")
+        print(f"   Temperature: {temperature}")
+        _groq_config_logged = True
+
+    # Create model with explicit parameters to avoid any configurable context issues
+    return ChatGroq(
+        model=model,         # note: use `model=...` per most Groq bindings
+        temperature=temperature,
+        api_key=api_key,
+        # Explicitly disable any configurable features that might cause issues
+        streaming=False,  # Disable streaming at model level to avoid context issues
+        timeout=30.0,     # Set explicit timeout
+    )
 
 
 class  ScoutState(BaseModel):
@@ -30,20 +65,17 @@ class Agent:
             self, 
             name: str, 
             tools: List = [query_db, generate_visualization],
-            model: str = "gpt-4.1-mini-2025-04-14", 
+            model: str = None, 
             system_prompt: str = "You are a helpful assistant.",
-            temperature: float = 0.1
+            temperature: float = None
             ):
         self.name = name
         self.tools = tools
-        self.model = model
+        self.model = model or GROQ_MODEL
         self.system_prompt = system_prompt
-        self.temperature = temperature
+        self.temperature = temperature if temperature is not None else GROQ_TEMPERATURE
         
-        self.llm = ChatOpenAI(
-            model=self.model,
-            temperature=self.temperature
-            ).bind_tools(self.tools)
+        self.llm = get_groq_chat_model().bind_tools(self.tools)
         
         self.runnable = self.build_graph()
 

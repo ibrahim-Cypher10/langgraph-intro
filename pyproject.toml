@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "langchain-core>=0.3.55",
-    "langchain-openai>=0.3.14",
+    "langchain-groq",
     "langgraph>=0.2.76",
     "pandas>=2.2.3",
     "plotly>=6.0.1",

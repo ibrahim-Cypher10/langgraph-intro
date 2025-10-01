@@ -13,9 +13,7 @@ def main():
 
         agent = Agent(
             name="Scout",
-            system_prompt=prompts.scout_system_prompt,
-            model="gpt-4.1-mini-2025-04-14",
-            temperature=0.1
+            system_prompt=prompts.scout_system_prompt
         )
 
         # Stream responses
