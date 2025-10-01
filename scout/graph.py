@@ -5,10 +5,11 @@ from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage, AI
 from langgraph.graph.message import add_messages
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode
+from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.checkpoint.memory import MemorySaver
 from scout.tools import query_db, generate_visualization
 from scout.prompts import prompts
-from scout.env import GROQ_API_KEY, GROQ_MODEL, GROQ_TEMPERATURE
+from scout.env import GROQ_API_KEY, GROQ_MODEL, GROQ_TEMPERATURE, DATABASE_URI
 
 # Global flag to track if Groq config has been logged
 _groq_config_logged = False
@@ -108,7 +109,22 @@ class Agent:
         builder.add_conditional_edges("chatbot", router, ["tools", END])
         builder.add_edge("tools", "chatbot")
 
-        return builder.compile()
+        # Use PostgreSQL checkpointer for persistence
+        checkpointer = None
+        if DATABASE_URI:
+            try:
+                checkpointer = PostgresSaver.from_conn_string(DATABASE_URI)
+                checkpointer.setup()  # Create tables if they don't exist
+                print("✅ Using PostgreSQL checkpointer for persistence")
+            except Exception as e:
+                print(f"⚠️  PostgreSQL checkpointer failed: {e}")
+                print("   Falling back to MemorySaver (no persistence)")
+                checkpointer = MemorySaver()
+        else:
+            print("⚠️  DATABASE_URI not set, using MemorySaver (no persistence)")
+            checkpointer = MemorySaver()
+        
+        return builder.compile(checkpointer=checkpointer)
     
 
     def inspect_graph(self):
